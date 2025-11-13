@@ -1,6 +1,6 @@
 {
   "name": "@mft-energyoss/github-actions",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "The github-actions extension module for @backstage/plugin-scaffolder-backend",
   "backstage": {
     "role": "backend-plugin-module",

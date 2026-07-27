@@ -29,11 +29,26 @@ const backend = createBackend();
 backend.add(import('@mft-energyoss/github-actions'));
 ```
 
+### How the run is identified
+
+The action asks GitHub to return the details of the run it just created
+(`return_run_details`), and then polls that run by id. This is exact — two
+templates dispatching the same workflow at the same moment each await their own
+run.
+
+If GitHub answers the dispatch without run details (older GitHub Enterprise
+Server, or if the parameter is withdrawn — it is not in the public REST docs
+yet), the action falls back to its previous behaviour: listing recent
+`workflow_dispatch` runs on the branch and matching `trigger_event` against the
+run name. That fallback still needs `run-name`, so keeping it in your workflows
+is recommended.
+
 ### Usage
 
 Make sure that your GitHub workflow has this minimal configuration:
 
 ```yaml
+# Only needed for the fallback path, but recommended.
 run-name: Triggered by ${{ inputs.trigger_event }}
 
 on:
@@ -60,4 +75,27 @@ Then, in your scaffolder template, you can use the action like this:
         branchName: main
         inputs:
           trigger_event: ${{ user.entity.spec.profile.email ~ ' ' ~ context.task.id }}
+        # Optional
+        timeoutSeconds: 3600
+        pollIntervalSeconds: 5
 ```
+
+#### Inputs
+
+| Input                 | Required | Default | Description                                                          |
+| --------------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `owner`               | yes      |         | Organization or user                                                   |
+| `repo`                | yes      |         | Repository name                                                        |
+| `workflow`            | yes      |         | Workflow id or filename                                                |
+| `branchName`          | yes      |         | Branch or tag to dispatch on                                           |
+| `inputs`              | yes      |         | Workflow inputs. Must include `trigger_event`                          |
+| `timeoutSeconds`      | no       | `3600`  | Fail the step if the run has not concluded within this many seconds    |
+| `pollIntervalSeconds` | no       | `5`     | How often to ask GitHub for the run status                             |
+
+#### Outputs
+
+| Output           | Description                                                           |
+| ---------------- | --------------------------------------------------------------------- |
+| `conclusion`     | Conclusion of the run. The step throws unless this is `success`        |
+| `workflowRunUrl` | Link to the run, emitted as soon as the run is known — before it ends  |
+| `workflowRunId`  | Run id, when GitHub reported it on dispatch                            |

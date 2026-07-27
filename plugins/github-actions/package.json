@@ -1,6 +1,6 @@
 {
   "name": "@mft-energyoss/github-actions",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "The github-actions extension module for @backstage/plugin-scaffolder-backend",
   "backstage": {
     "role": "backend-plugin-module",
@@ -50,25 +50,31 @@
     "test": "backstage-cli package test"
   },
   "dependencies": {
+    "@backstage/backend-plugin-api": "backstage:^",
     "@backstage/catalog-model": "backstage:^",
     "@backstage/core-compat-api": "backstage:^",
     "@backstage/core-components": "backstage:^",
     "@backstage/core-plugin-api": "backstage:^",
+    "@backstage/errors": "backstage:^",
     "@backstage/frontend-plugin-api": "backstage:^",
     "@backstage/integration": "backstage:^",
     "@backstage/integration-react": "backstage:^",
     "@backstage/plugin-catalog-react": "backstage:^",
+    "@backstage/plugin-scaffolder-node": "backstage:^",
     "@material-ui/core": "^4.12.4",
     "@material-ui/icons": "^4.11.3",
     "@material-ui/lab": "4.0.0-alpha.61",
     "@octokit/rest": "^19.0.13",
     "@types/react": "^18.3.26",
+    "axios": "^1.12.2",
     "git-url-parse": "^14.1.0",
     "luxon": "^3.7.2",
-    "react-use": "^17.6.0"
+    "react-use": "^17.6.0",
+    "yaml": "^2.8.1"
   },
   "devDependencies": {
     "@backstage/cli": "backstage:^",
+    "@backstage/config": "backstage:^",
     "@backstage/core-app-api": "backstage:^",
     "@backstage/dev-utils": "backstage:^",
     "@backstage/frontend-test-utils": "backstage:^",
